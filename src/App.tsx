@@ -180,8 +180,16 @@ export default function App() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 border-b border-black bg-[#E4E3E0]/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="font-mono font-bold text-lg tracking-tighter">
-            BKS<span className="opacity-40">.DS</span>
+          <div className="flex items-center gap-3">
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/en/6/69/IIT_Madras_Logo.svg" 
+              alt="IIT Madras Logo" 
+              className="h-8 w-auto"
+              referrerPolicy="no-referrer"
+            />
+            <div className="font-mono font-bold text-lg tracking-tighter">
+              BKS<span className="opacity-40">.DS</span>
+            </div>
           </div>
           <div className="hidden md:flex gap-8 font-mono text-xs uppercase tracking-widest">
             <a href="#about" className="hover:line-through">About</a>
