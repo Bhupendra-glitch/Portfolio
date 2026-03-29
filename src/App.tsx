@@ -244,7 +244,7 @@ export default function App() {
               whileTap={{ scale: 0.95 }}
               className="bg-black text-[#E4E3E0] px-8 py-4 flex items-center gap-3 font-mono text-xs uppercase tracking-widest hover:bg-[#F27D26] transition-colors"
             >
-              Download Resume < https://drive.google.com/file/d/1rzK_kSlrdmsGfFJ38ewc77rv4LftFVj0/view?usp=sharing />
+              Download Resume < e:\MY Resume\New Resume 3.pdf />
             </motion.button>
           </div>
         </div>
