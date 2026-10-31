@@ -18,12 +18,13 @@ import {
   ChevronRight,
   Download,
   GraduationCap,
-  Briefcase,
   Award,
   Cpu,
   Globe,
   GitBranch,
-  Binary
+  Binary,
+  Trophy,
+  Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -41,13 +42,28 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle?: string }
   </div>
 );
 
-const ProjectCard: React.FC<{ project: { title: string; date: string; description: string; bulletPoints?: string[]; tags: string[]; link: string } }> = ({ project }) => (
+interface ProjectItem {
+  title: string;
+  subtitle?: string;
+  date: string;
+  description: string;
+  bulletPoints?: string[];
+  tags: string[];
+  link: string;
+}
+
+const ProjectCard: React.FC<{ project: ProjectItem }> = ({ project }) => (
   <motion.div 
     whileHover={{ backgroundColor: COLORS.ink, color: COLORS.bg }}
     className="group border border-black p-6 transition-colors duration-300 flex flex-col h-full bg-white/40 backdrop-blur-sm"
   >
     <div className="flex justify-between items-start mb-4">
-      <span className="font-mono text-xs opacity-60 group-hover:text-white/60">{project.date}</span>
+      <div>
+        <span className="font-mono text-xs opacity-60 group-hover:text-white/60 block">{project.date}</span>
+        {project.subtitle && (
+          <span className="font-mono text-[10px] uppercase tracking-wider text-[#F27D26]">{project.subtitle}</span>
+        )}
+      </div>
       <a href={project.link} target="_blank" rel="noopener noreferrer" className="opacity-60 group-hover:opacity-100 group-hover:text-white transition-all hover:scale-110">
         <ExternalLink size={16} />
       </a>
@@ -93,23 +109,65 @@ export default function App() {
   const [projectTab, setProjectTab] = useState<'featured' | 'all'>('featured');
   const [showPrintModal, setShowPrintModal] = useState(false);
 
-  // Core resume projects
-  const featuredProjects = [
+  // Core resume projects from updated resume
+  const featuredProjects: ProjectItem[] = [
     {
-      title: "IPL Analysis Dashboard",
-      date: "Nov 2025 - Apr 2026",
-      description: "An interactive analytics system processing over 1,000 matches and 200,000 deliveries with advanced predictive ML capabilities.",
+      title: "IPLAnalysis",
+      subtitle: "Independent Development",
+      date: "Nov 2025 – Apr 2026",
+      description: "Built an interactive IPL Analytics Dashboard using Python, Streamlit, Pandas, and Plotly, processing 1,000+ matches and 200,000+ deliveries.",
       bulletPoints: [
-        "Built dynamic visualizations with Streamlit, Pandas, and Plotly for deep trend discovery.",
-        "Created ML models for match prediction & live score forecasting with 85%+ accuracy.",
-        "Engineered SaaS features including Fantasy Team Generator and 3 premium subscription plans."
+        "Built an interactive IPL Analytics Dashboard using Python, Streamlit, Pandas, and Plotly, processing 1,000+ matches and 200,000+ deliveries.",
+        "Developed 2 ML models for match-winner prediction and live-score forecasting, achieving 85%+ accuracy and reducing manual analysis time by 60%.",
+        "Implemented 10+ interactive visualizations, player insights, Fantasy Team Generator, real-time predictions."
       ],
       tags: ["Python", "Streamlit", "Pandas", "Plotly", "Machine Learning", "EDA"],
       link: "https://github.com/Bhupendra-glitch"
     },
     {
+      title: "CrediMerge",
+      subtitle: "Independent Project",
+      date: "Jan 2026 – Apr 2026",
+      description: "CrediMerge is an AI-powered financial analytics platform designed to help users manage loans and understand their credit health.",
+      bulletPoints: [
+        "Provides loan consolidation analysis, cash-flow insights, financial risk simulation, and alternative credit health assessment to support smarter financial decisions.",
+        "Built using modern full-stack technologies, CrediMerge aims to make financial insights more accessible, transparent, and data-driven."
+      ],
+      tags: ["Full Stack", "AI / ML", "Financial Analytics", "Risk Simulation", "Credit Health"],
+      link: "https://github.com/Bhupendra-glitch"
+    },
+    {
+      title: "PredictDemand",
+      subtitle: "Independent Project",
+      date: "Nov 2025 – Jan 2026",
+      description: "Developed an AI-powered Demand Forecasting Web Application using Streamlit, processing 10K+ sales records with ARIMA and Exponential Smoothing models.",
+      bulletPoints: [
+        "Developed an AI-powered Demand Forecasting Web Application using Streamlit, processing 10K+ sales records with ARIMA and Exponential Smoothing models.",
+        "Built 8+ interactive dashboard modules for EDA, forecasting, product analysis, and business intelligence.",
+        "Automated demand recommendations and reporting, improving restocking efficiency by 30%+ and reducing manual reporting effort by 70%."
+      ],
+      tags: ["Python", "Streamlit", "ARIMA", "Exponential Smoothing", "EDA", "BI"],
+      link: "https://github.com/Bhupendra-glitch"
+    }
+  ];
+
+  // Combined additional/earlier projects
+  const allProjects: ProjectItem[] = [
+    ...featuredProjects,
+    {
+      title: "GigCred",
+      subtitle: "HackBios Hackathon Finalist",
+      date: "2025",
+      description: "AI-powered financial intelligence and credit-health platform for gig workers, freelancers, micro-merchants, and new-to-credit users.",
+      bulletPoints: [
+        "Provides explainable financial health scoring, cash-flow forecasting, risk insights, and personalized credit guidance."
+      ],
+      tags: ["FinTech", "Explainable AI", "Cash-Flow Forecasting", "Credit Scoring"],
+      link: "https://github.com/Bhupendra-glitch"
+    },
+    {
       title: "ChurnPredictAI Dashboard",
-      date: "Jan 2026 - Apr 2026",
+      date: "Jan 2026 – Apr 2026",
       description: "End-to-end customer segmentation and retention analytics platform analyzing over 7,000 customer records.",
       bulletPoints: [
         "Constructed predictive classification models reaching an overall accuracy of 85%+",
@@ -119,23 +177,6 @@ export default function App() {
       tags: ["Python", "XGBoost", "LightGBM", "Scikit-Learn", "Streamlit", "Clustering"],
       link: "https://github.com/Bhupendra-glitch"
     },
-    {
-      title: "PredictDemand Application",
-      date: "Nov 2025 - Jan 2026",
-      description: "AI-powered predictive forecasting system capable of processing 10,000+ records to optimize supply chain inventory metrics.",
-      bulletPoints: [
-        "Integrated advanced forecasting algorithms (ARIMA and Exponential Smoothing) for sales pipelines.",
-        "Built 8 interactive dashboard modules mapping regional trends and hot-selling item clusters.",
-        "Created recommendation systems reducing restocking reporting efforts by 70%."
-      ],
-      tags: ["Python", "ARIMA", "Statsmodels", "Sales Forecasting", "Plotly", "Streamlit"],
-      link: "https://github.com/Bhupendra-glitch"
-    }
-  ];
-
-  // Combined additional/earlier projects requested
-  const allProjects = [
-    ...featuredProjects,
     {
       title: "Experimentation Uplift Modeling",
       date: "Feb 2026",
@@ -195,85 +236,127 @@ export default function App() {
   ];
 
   const skillGroups = [
-    { title: "Programming Languages", icon: Code2, skills: ["Python", "C", "C++", "Java"] },
-    { title: "Backend & Databases", icon: Database, skills: ["FastAPI", "REST APIs", "MySQL"] },
-    { title: "Data Analysis & Viz", icon: LineChart, skills: ["NumPy", "Pandas", "Matplotlib", "Seaborn", "MS Excel", "Power BI", "Google Analytics"] },
-    { title: "Web Technologies", icon: Globe, skills: ["HTML", "CSS", "JavaScript", "MERN Stack"] },
-    { title: "Machine Learning & AI", icon: BrainCircuit, skills: ["Scikit-learn", "TensorFlow", "Keras", "OpenCV"] },
-    { title: "Cloud & DevOps", icon: GitBranch, skills: ["Git", "GitHub", "Google Cloud Platform (GCP)", "Streamlit"] },
-    { title: "Deep Learning & NLP", icon: Cpu, skills: ["ANN", "CNN", "RNN", "NLP", "Generative AI"] },
-    { title: "Tools & IDEs", icon: Terminal, skills: ["Jupyter Notebook", "Google Colab", "VS Code"] },
-    { title: "CS Fundamentals", icon: Binary, skills: ["Data Structures & Algorithms", "OOPs"] }
+    { title: "Languages & Tools", icon: Code2, skills: ["Python", "C++", "Java"] },
+    { title: "Backend & Databases", icon: Database, skills: ["FastAPI", "Node.js", "Express.js", "MySQL", "MongoDB", "Redis", "Kafka"] },
+    { title: "AI / ML", icon: BrainCircuit, skills: ["Scikit-learn", "TensorFlow", "Keras", "NLP", "Generative AI", "OpenCV"] },
+    { title: "Data", icon: LineChart, skills: ["NumPy", "Pandas", "Matplotlib", "Power BI"] },
+    { title: "Cloud & DevOps", icon: Cloud, skills: ["GCP", "Docker", "Kubernetes", "Git", "GitHub"] },
+    { title: "Core", icon: Binary, skills: ["DSA", "OOP", "REST APIs", "MERN Stack"] }
+  ];
+
+  const scholasticAchievements = [
+    {
+      title: "Top 10 Finalist — RaSoR (Ramanujan Society of Research-IIT Madras)",
+      description: "Selected among Top 10 out of 420+ participants for the TinyML: Bringing Neural Networks to Microcontrollers research."
+    },
+    {
+      title: "Certificate of Presentation — IASCSI Conference, IIT Ropar",
+      description: "Presented research at the Integrated Approaches for Sustainable Crop Science Innovation Conference."
+    },
+    {
+      title: "Tier-1 Achiever — Google Cloud GenAI Study Jams 2024",
+      description: "Ranked among the Top 80 participants to achieve Tier 1 in the GenAI Study Jams program conducted by GDG On Campus, SSTC, with 80+ participants completing the Tier-1 journey."
+    },
+    {
+      title: "Google Solution Challenge 2025 — Participant",
+      description: "Participated in the Google Developer Groups Solution Challenge, building a technology-driven solution for a real-world problem."
+    },
+    {
+      title: "Finalist — HackBios Hackathon",
+      description: "Selected as a finalist for developing GigCred, an AI-powered financial intelligence and credit-health platform for gig workers, freelancers, micro-merchants, and new-to-credit users, providing explainable financial health scoring, cash-flow forecasting, risk insights, and personalized credit guidance."
+    }
   ];
 
   const experiences = [
     {
       role: "Summer Research Intern",
       type: "Internship",
-      company: "Vicharanashala Lab for Education Design - IIT ROPAR",
-      location: "Remote | Rupnagar, Punjab, India",
-      date: "May 2026 - Present",
+      company: "Vicharanashala Lab for Education Design – IIT Ropar",
+      focus: "Open-Source Research & AI-Driven Educational Technology",
+      date: "May 2026 – Jun 2026",
       bullets: [
         "Worked on real-world open-source research and development projects under the mentorship of the VLED Lab team at IIT Ropar.",
         "Collaborated remotely on educational technology and AI-driven initiatives.",
-        "Contributed to project research, documentation, testing, and development tasks.",
-        "Explored and worked with open-source repositories, tools, and research materials."
+        "Contributed to project research, documentation, testing, and development tasks and explored and worked with open-source repositories, tools, and research materials."
       ],
-      skills: ["Python", "React", "EDA"]
+      skills: ["Open-Source R&D", "Educational Technology", "AI Initiatives", "Python"]
     },
     {
       role: "Data Analytics Project Trainee",
       type: "Trainee",
       company: "Consulting & Analytics Club, IIT Guwahati",
-      location: "Remote",
-      date: "Apr 2026 - Present",
+      focus: "Customer Retention Analytics Solution",
+      date: "Apr 2026 – May 2026",
       bullets: [
-        "Developed an end-to-end Customer Retention Analytics Solution using Python, SQL, and Power BI, analyzing customer behavior to identify high-value segments and improve retention strategies.",
-        "Engineered advanced features and executed customer segmentation, cohort analysis, and SQL-driven insights, uncovering repeat purchase trends, discount dependency, and churn-risk patterns.",
-        "Built an interactive executive dashboard and proposed data-backed strategies that optimized promotions, increased loyalty focus, and supported revenue growth decisions."
+        "Developed an end-to-end Customer Retention Analytics Solution using Python, SQL, and Power BI.",
+        "Performed customer segmentation, cohort analysis, and SQL-driven analysis to identify churn-risk patterns and repeat-purchase trends.",
+        "Built an interactive executive dashboard and proposed data-backed strategies to improve retention and revenue decisions."
       ],
-      skills: ["Python", "SQL", "EDA"]
+      skills: ["Python", "SQL", "Power BI", "Cohort Analysis", "Segmentation"]
     },
     {
       role: "Volunteer",
-      type: "Part-time",
-      company: "Google Developer Group - SSTC",
-      location: "On-site",
-      date: "Nov 2025 - Jan 2026",
+      type: "Community",
+      company: "Google Developer Group – SSTC",
+      focus: "Cloud Computing & AI Community Initiatives",
+      date: "Nov 2025 – Jan 2026",
       bullets: [
         "Assisted in organizing cloud computing and AI workshops for students.",
-        "Supported participants in hands-on labs and technical learning sessions.",
-        "Coordinated event activities, registrations, and learner engagement.",
-        "Promoted tech community growth through collaborative initiatives."
+        "Supported participants through hands-on labs and technical learning sessions.",
+        "Promoted technology community growth through collaborative initiatives."
       ],
       skills: ["Google Cloud", "Vertex AI", "Gemini", "Streamlit"]
     },
     {
-      role: "Contributor",
-      type: "Internship",
+      role: "Open-Source Contributor",
+      type: "Open Source",
       company: "GirlScript Summer of Code",
-      location: "Remote",
-      date: "Jun 2025 - Nov 2025",
+      focus: "Open-Source Software Development",
+      date: "Jun 2025 – Nov 2025",
       bullets: [
         "Contributed to open-source projects by fixing bugs and implementing new features using Git and GitHub.",
-        "Collaborated with cross-team developers to enhance code quality and improve project functionality.",
-        "Utilized version control systems to manage pull requests and track issues in a real-world development environment."
+        "Collaborated with developers to improve code quality and project functionality.",
+        "Managed pull requests and issues using version control workflows."
       ],
-      skills: ["React", "Node.js", "MongoDB", "Python"]
+      skills: ["Git", "GitHub", "Open Source", "Version Control"]
+    }
+  ];
+
+  const positionsOfResponsibility = [
+    {
+      role: "Student Coordinator",
+      org: "GDG SSTC / Technical Community",
+      date: "2025 – Present",
+      bullets: [
+        "Organized institute-level technical workshops and events engaging 500+ students.",
+        "Coordinated technical sessions, registrations, and student participation.",
+        "Supported students during AI, Cloud, and Generative AI hands-on workshops.",
+        "Contributed to technical community growth through collaborative initiatives."
+      ]
     },
     {
-      role: "Contributor",
-      type: "Internship",
-      company: "Social Summer of Code",
-      location: "Remote",
-      date: "May 2025 - Aug 2025",
+      role: "Open Source Contributor",
+      org: "GirlScript Summer of Code",
+      date: "Aug 2025 – Dec 2025",
       bullets: [
-        "Selected for a competitive open-source program, contributing production-level features and resolving critical issues in live projects.",
-        "Collaborated with mentors and developers worldwide through GitHub, code reviews, pull requests, and agile workflows.",
-        "Delivered high-quality code, optimized project documentation, and strengthened problem-solving in real-world software development."
-      ],
-      skills: ["React", "Node.js", "Express", "Python", "MongoDB"]
+        "Contributed to open-source projects by implementing features and resolving issues.",
+        "Collaborated with developers through GitHub, pull requests, and code reviews.",
+        "Improved project functionality and code quality through collaborative development."
+      ]
     }
+  ];
+
+  const relevantCourses = [
+    { name: "Applied Machine Learning using Python", ongoing: false },
+    { name: "Deep Learning Techniques and Applications", ongoing: false },
+    { name: "Applied Deep Learning using Python", ongoing: false },
+    { name: "Natural Language Processing", ongoing: false },
+    { name: "Google Cloud Computing & Generative AI", ongoing: false },
+    { name: "RAG", ongoing: true },
+    { name: "LangChain + LangGraph + LLaMA", ongoing: true },
+    { name: "Statsmodels", ongoing: true },
+    { name: "Computer Vision", ongoing: false },
+    { name: "Computer Networks", ongoing: false }
   ];
 
   const handleDownloadPdf = () => {
@@ -301,6 +384,7 @@ export default function App() {
           </div>
           <div className="hidden md:flex gap-8 font-mono text-xs uppercase tracking-widest">
             <a href="#about" className="hover:text-[#F27D26] hover:underline decoration-2 underline-offset-4 transition-all">About</a>
+            <a href="#achievements" className="hover:text-[#F27D26] hover:underline decoration-2 underline-offset-4 transition-all">Achievements</a>
             <a href="#experience" className="hover:text-[#F27D26] hover:underline decoration-2 underline-offset-4 transition-all">Experience</a>
             <a href="#skills" className="hover:text-[#F27D26] hover:underline decoration-2 underline-offset-4 transition-all">Skills</a>
             <a href="#projects" className="hover:text-[#F27D26] hover:underline decoration-2 underline-offset-4 transition-all">Projects</a>
@@ -322,9 +406,9 @@ export default function App() {
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="font-mono text-xs uppercase tracking-[0.3em] mb-4 text-[#F27D26] font-semibold"
+                className="font-mono text-xs uppercase tracking-[0.25em] mb-4 text-[#F27D26] font-semibold"
               >
-                Aspiring Data Scientist
+                Computer Science &amp; Engineering | Data Science
               </motion.p>
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
@@ -340,8 +424,8 @@ export default function App() {
                 transition={{ delay: 0.2 }}
                 className="text-lg max-w-lg opacity-85 leading-relaxed"
               >
-                Specializing in **Machine Learning**, **Deep Learning**, and **Generative AI**. 
-                Proven track record in open-source R&D and end-to-end data products with clean Python & Google Cloud stacks.
+                Specializing in <strong>Machine Learning</strong>, <strong>Deep Learning</strong>, and <strong>Generative AI</strong>. 
+                Proven track record in open-source R&amp;D and end-to-end data products with modern Python, Full-Stack &amp; Google Cloud stacks.
               </motion.p>
             </div>
             
@@ -373,27 +457,54 @@ export default function App() {
             <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="border border-black p-6 flex flex-col justify-between bg-white/20 backdrop-blur-sm shadow-sm">
                 <div>
-                  <GraduationCap className="mb-4 text-[#F27D26]" size={24} />
-                  <h3 className="text-lg font-bold uppercase mb-1">BS in Data Science</h3>
+                  <div className="flex justify-between items-start mb-4">
+                    <GraduationCap className="text-[#F27D26]" size={24} />
+                    <span className="font-mono text-xs font-bold bg-black text-[#E4E3E0] px-2.5 py-1">CPI: 7.25</span>
+                  </div>
+                  <h3 className="text-lg font-bold uppercase mb-1">B.S. in Data Science</h3>
                   <p className="text-sm opacity-70 mb-4">Indian Institute of Technology Madras</p>
                 </div>
                 <div className="flex justify-between items-center mt-4">
-                  <span className="font-mono text-xs opacity-60">Sep 2025 - Present</span>
+                  <span className="font-mono text-xs opacity-60">2025 – Present</span>
                   <span className="font-mono text-[10px] border border-black/30 px-2 py-0.5 rounded-full">Pursuing</span>
                 </div>
               </div>
               
               <div className="border border-black p-6 flex flex-col justify-between bg-white/20 backdrop-blur-sm shadow-sm">
                 <div>
-                  <GraduationCap className="mb-4 text-[#F27D26]" size={24} />
-                  <h3 className="text-lg font-bold uppercase mb-1">B.Tech in CS</h3>
+                  <div className="flex justify-between items-start mb-4">
+                    <GraduationCap className="text-[#F27D26]" size={24} />
+                    <span className="font-mono text-xs font-bold bg-black text-[#E4E3E0] px-2.5 py-1">CPI: 7.5</span>
+                  </div>
+                  <h3 className="text-lg font-bold uppercase mb-1">B.Tech in CSE</h3>
                   <p className="text-sm opacity-70 mb-4">Shri Shankaracharya Technical Campus</p>
                 </div>
                 <div className="flex justify-between items-center mt-4">
-                  <span className="font-mono text-xs opacity-60">Sep 2024 - Present</span>
+                  <span className="font-mono text-xs opacity-60">2024 – Present</span>
                   <span className="font-mono text-[10px] border border-black/30 px-2 py-0.5 rounded-full">Pursuing</span>
                 </div>
               </div>
+            </div>
+          </section>
+
+          {/* Scholastic Achievements Section */}
+          <section id="achievements" className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="md:col-span-1">
+              <SectionHeader title="Scholastic Achievements" subtitle="Honors & Recognition" />
+            </div>
+            <div className="md:col-span-2 space-y-4">
+              {scholasticAchievements.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="border border-black p-6 bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors flex gap-4 items-start"
+                >
+                  <Trophy className="shrink-0 text-[#F27D26] mt-0.5" size={20} />
+                  <div>
+                    <h3 className="font-bold text-base uppercase tracking-tight mb-1">{item.title}</h3>
+                    <p className="text-sm opacity-80 leading-relaxed">{item.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -410,8 +521,8 @@ export default function App() {
                     <h3 className="text-xl font-bold uppercase leading-tight">{exp.role} <span className="text-xs font-mono font-normal tracking-wide lowercase border border-black/20 px-2 py-0.5 rounded bg-black/5">({exp.type})</span></h3>
                     <span className="font-mono text-xs opacity-65 bg-[#141414]/10 px-2 py-1">{exp.date}</span>
                   </div>
-                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-[#F27D26] mb-3">{exp.company}</p>
-                  <p className="font-mono text-[10px] opacity-50 uppercase tracking-widest mb-4">{exp.location}</p>
+                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-[#F27D26] mb-1">{exp.company}</p>
+                  <p className="font-mono text-[11px] opacity-60 mb-4">{exp.focus}</p>
                   
                   <ul className="space-y-2 opacity-80 text-sm list-disc list-inside mb-4 leading-relaxed">
                     {exp.bullets.map((bullet, bIdx) => (
@@ -434,7 +545,7 @@ export default function App() {
 
           {/* Skills Section */}
           <section id="skills">
-            <SectionHeader title="Tools & Skills" subtitle="Comprehensive Capabilities" />
+            <SectionHeader title="Technical Skills" subtitle="Comprehensive Capabilities" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {skillGroups.map((group, idx) => (
                 <SkillCategory key={idx} {...group} />
@@ -447,7 +558,7 @@ export default function App() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 border-b border-black pb-4 gap-4">
               <div>
                 <h2 className="font-serif italic text-4xl text-black">Projects</h2>
-                <p className="font-mono text-xs uppercase tracking-widest opacity-60 mt-2">Selected Works & Pipelines</p>
+                <p className="font-mono text-xs uppercase tracking-widest opacity-60 mt-2">Selected Works &amp; Pipelines</p>
               </div>
               
               <div className="flex border border-black bg-white/20 p-1">
@@ -479,43 +590,45 @@ export default function App() {
             </div>
           </section>
 
-          {/* Coursework & Certificates */}
+          {/* Positions of Responsibility & Relevant Courses */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <SectionHeader title="Coursework" subtitle="Core Subjects" />
-              <div className="space-y-4">
-                {[
-                  "Machine Learning & Deep Learning",
-                  "Natural Language Processing",
-                  "Generative AI",
-                  "Linear Algebra & Optimization",
-                  "Probability & Statistics",
-                  "Data Structures & Algorithms"
-                ].map(course => (
-                  <div key={course} className="flex items-center gap-3 border-b border-black/10 py-2">
-                    <ChevronRight size={14} className="text-[#F27D26]" />
-                    <span className="text-sm font-medium">{course}</span>
+              <SectionHeader title="Positions of Responsibility" subtitle="Leadership & Community" />
+              <div className="space-y-6">
+                {positionsOfResponsibility.map((pos, idx) => (
+                  <div key={idx} className="border border-black p-6 bg-white/20 backdrop-blur-sm">
+                    <div className="flex justify-between items-start gap-2 mb-1">
+                      <div className="flex items-center gap-2">
+                        <Users size={18} className="text-[#F27D26] shrink-0" />
+                        <h4 className="font-bold text-base uppercase leading-tight">{pos.role}</h4>
+                      </div>
+                      <span className="font-mono text-xs opacity-60">{pos.date}</span>
+                    </div>
+                    <p className="text-[11px] font-mono text-[#F27D26] uppercase tracking-widest mb-3">{pos.org}</p>
+                    <ul className="space-y-1.5 text-sm opacity-80 list-disc list-inside leading-relaxed">
+                      {pos.bullets.map((b, bIdx) => (
+                        <li key={bIdx}>{b}</li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             <div>
-              <SectionHeader title="Certificates" subtitle="Recognition" />
-              <div className="space-y-6">
-                {[
-                  { title: "Applied Machine Learning using Python", provider: "Certification" },
-                  { title: "Applied Deep Learning using Python", provider: "Certification" },
-                  { title: "Deep Learning Techniques and Application", provider: "Certification" },
-                  { title: "Google Cloud Computing & Generative AI", provider: "Specialization" },
-                  { title: "Deep Learning and Neural Network", provider: "International Conference (IIT Ropar)" }
-                ].map((cert, idx) => (
-                  <div key={idx} className="flex gap-4">
-                    <Award className="shrink-0 text-[#F27D26]" size={20} />
-                    <div>
-                      <h4 className="font-bold text-sm uppercase leading-tight">{cert.title}</h4>
-                      <p className="text-[10px] font-mono opacity-60 uppercase tracking-widest mt-1">{cert.provider}</p>
+              <SectionHeader title="Relevant Courses" subtitle="Core & Ongoing Subjects" />
+              <div className="space-y-3">
+                {relevantCourses.map((course, idx) => (
+                  <div key={idx} className="flex items-center justify-between border-b border-black/10 py-2">
+                    <div className="flex items-center gap-3">
+                      <ChevronRight size={14} className="text-[#F27D26]" />
+                      <span className="text-sm font-medium">{course.name}</span>
                     </div>
+                    {course.ongoing && (
+                      <span className="font-mono text-[10px] uppercase tracking-wider bg-[#F27D26]/15 text-[#F27D26] border border-[#F27D26]/30 px-2 py-0.5">
+                        Ongoing
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>
@@ -575,7 +688,7 @@ export default function App() {
         {/* Footer Micro-details */}
         <footer className="px-6 py-8 border-t border-black/10">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-[10px] uppercase tracking-widest opacity-40">
-            <div>Built with React, Vite & Tailwind</div>
+            <div>Built with React, Vite &amp; Tailwind</div>
             <div>IIT Madras | SSTC</div>
           </div>
         </footer>
@@ -591,7 +704,7 @@ export default function App() {
         <div className="border-b-2 border-black pb-4 mb-4 flex justify-between items-end">
           <div>
             <h1 className="text-3xl font-bold uppercase tracking-tight">Bhupendra Kumar Sahu</h1>
-            <p className="text-[#F27D26] font-semibold text-sm uppercase tracking-wider font-mono">BS - Data Science and Application</p>
+            <p className="text-[#F27D26] font-semibold text-sm uppercase tracking-wider font-mono">Computer Science &amp; Engineering | Data Science</p>
           </div>
           <div className="text-right font-mono text-[10px] space-y-0.5 text-black/80">
             <div>bhupendrasahu132004@gmail.com</div>
@@ -601,41 +714,39 @@ export default function App() {
         </div>
 
         <div className="mb-4">
-          <h2 className="text-sm font-bold uppercase border-b border-black pb-1 mb-2 text-[#F27D26]">Professional Summary</h2>
-          <p className="opacity-90">
-            Aspiring Data Scientist with expertise in Machine Learning, Deep Learning, and Generative AI. Proficient in Python and experienced with Google Cloud.
-          </p>
-        </div>
-
-        <div className="mb-4">
           <h2 className="text-sm font-bold uppercase border-b border-black pb-1 mb-2 text-[#F27D26]">Education</h2>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <div className="flex justify-between font-semibold">
-              <div>Indian Institute of Technology Madras <span className="font-normal">| Chennai</span></div>
-              <span className="font-normal text-[10px]">Sep 2025 - Present</span>
+              <div>B.S. — Indian Institute of Technology Madras</div>
+              <span className="font-normal text-[10px]">2025 – Present | CPI: 7.25</span>
             </div>
-            <div className="pl-4 text-black/70 italic">Pursuing BS(Data Science and Application)</div>
-            
-            <div className="flex justify-between font-semibold mt-1">
-              <div>Shri Shankaracharya Technical Campus <span className="font-normal">| Bhilai</span></div>
-              <span className="font-normal text-[10px]">Sep 2024 - Present</span>
+            <div className="flex justify-between font-semibold">
+              <div>B.Tech — Shri Shankaracharya Technical Campus</div>
+              <span className="font-normal text-[10px]">2024 – Present | CPI: 7.5</span>
             </div>
-            <div className="pl-4 text-black/70 italic">Pursuing B.Tech(Computer Science)</div>
           </div>
         </div>
 
         <div className="mb-4">
-          <h2 className="text-sm font-bold uppercase border-b border-black pb-1 mb-2 text-[#F27D26]">Work Experiences</h2>
-          <div className="space-y-3">
-            {experiences.slice(0, 3).map((exp, idx) => (
+          <h2 className="text-sm font-bold uppercase border-b border-black pb-1 mb-2 text-[#F27D26]">Scholastic Achievements</h2>
+          <ul className="list-disc list-inside space-y-0.5 text-black/85">
+            {scholasticAchievements.map((ach, idx) => (
+              <li key={idx}><span className="font-semibold">{ach.title}:</span> {ach.description}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mb-4">
+          <h2 className="text-sm font-bold uppercase border-b border-black pb-1 mb-2 text-[#F27D26]">Work Experience</h2>
+          <div className="space-y-2.5">
+            {experiences.map((exp, idx) => (
               <div key={idx}>
                 <div className="flex justify-between font-semibold">
                   <div>{exp.role} <span className="font-normal text-black/60">| {exp.company}</span></div>
                   <span className="font-normal text-[10px]">{exp.date}</span>
                 </div>
-                <div className="text-[9px] text-[#F27D26] font-mono mb-1">{exp.location}</div>
                 <ul className="list-disc list-inside space-y-0.5 text-black/80 pl-2">
-                  {exp.bullets.slice(0, 3).map((bullet, bIdx) => (
+                  {exp.bullets.map((bullet, bIdx) => (
                     <li key={bIdx} className="leading-tight">{bullet}</li>
                   ))}
                 </ul>
@@ -663,10 +774,10 @@ export default function App() {
         <div>
           <h2 className="text-sm font-bold uppercase border-b border-black pb-1 mb-2 text-[#F27D26]">Technical Skills</h2>
           <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-black/90">
-            {skillGroups.slice(0, 6).map((group, idx) => (
+            {skillGroups.map((group, idx) => (
               <div key={idx} className="flex justify-between">
                 <span className="font-bold">{group.title}:</span>
-                <span className="text-right text-black/75">{group.skills.slice(0, 5).join(', ')}</span>
+                <span className="text-right text-black/75">{group.skills.join(', ')}</span>
               </div>
             ))}
           </div>
